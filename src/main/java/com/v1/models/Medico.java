@@ -2,11 +2,10 @@ package com.v1.models;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Paciente {
+public class Medico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,17 +13,16 @@ public class Paciente {
     private String nombre;
     private String apellido;
     private String dni;
-    private String cuil;
+    private String matriculaNacional;
+    private String especialidad;
     private String email;
-    private String telefono;
-    private String direccion;
-    private String localidad;
-    private String provincia;
-
-    @Temporal(TemporalType.DATE)
-    private Date fechaNacimiento;
 
     // Relaciones
-    @OneToMany(mappedBy = "paciente")
+    @OneToMany(mappedBy = "medico")
     private List<HistoriaClinica> historiasClinicas;
+
+    @OneToMany(mappedBy = "medico")
+    private List<Receta> recetas;
+
+    // Getters y setters
 }

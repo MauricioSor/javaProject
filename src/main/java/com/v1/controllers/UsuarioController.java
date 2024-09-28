@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/session")
-public class usuarioController {
+public class UsuarioController {
     @GetMapping("/")
     public String inicio(){
         return "Api de inicio de sesion";

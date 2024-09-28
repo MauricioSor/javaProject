@@ -1,22 +1,23 @@
 package com.v1.models;
-
 import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Entity
-public class HistoriaClinica {
+@Table (name="Recetas_Digitales")
+public class Receta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaConsulta;
+    @Temporal(TemporalType.DATE)
+    private Date fechaEmision;
 
+    private String medicamentoComercial;
+    private String medicamentoGenerico;
     private String diagnostico;
-
-    @Lob
-    private String evolucion;
+    private String firmaElectronica;
+    private String codigoBarra;
 
     // Relación con Paciente
     @ManyToOne
