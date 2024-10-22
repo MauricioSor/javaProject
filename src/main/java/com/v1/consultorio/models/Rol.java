@@ -6,28 +6,47 @@ import java.util.List;
 @Entity
 @Table(name = "roles")
 public class Rol {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idRol;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Integer idRol;
+    private String nombre;
 
-        private String nombre;
+    // Relación inversa opcional (OneToMany)
+    @OneToMany(mappedBy = "rol", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Usuario> usuarios;
 
-        // Getters y Setters
-        public Integer getIdRol() {
-            return idRol;
-        }
+    // Constructor sin argumentos requerido por JPA
+    public Rol() {
+    }
 
-        public void setIdRol(Integer idRol) {
-            this.idRol = idRol;
-        }
+    // Constructor que acepta el nombre
+    public Rol(String nombre) {
+        this.nombre = nombre;
+    }
 
-        public String getNombre() {
-            return nombre;
-        }
+    // Getters y Setters
+    public Integer getIdRol() {
+        return idRol;
+    }
 
-        public void setNombre(String nombre) {
-            this.nombre = nombre;
-        }
+    public void setIdRol(Integer idRol) {
+        this.idRol = idRol;
+    }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
 }

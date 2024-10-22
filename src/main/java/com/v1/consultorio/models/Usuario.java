@@ -5,32 +5,24 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUsuario;
-
     private String nombre;
-
     @Column(name = "contraseña", nullable = false)
     private String contraseña;
-
     @Column(name = "mail", nullable = false)
     private String mail;
-
-    @ManyToOne
-    @JoinColumn(name = "idROL", referencedColumnName = "idRol", nullable = false)  // Ajusta esto según la columna correcta en la tabla de roles
-    private Rol rol;
-
+    // Almacena el rol como un string directamente
+    @Column(name = "rol", nullable = false)
+    private String rol;
     // Getters y setters
     public Integer getIdUsuario() {
         return idUsuario;
     }
-
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
-
     public String getNombre() {
         return nombre;
     }
@@ -55,15 +47,30 @@ public class Usuario {
         this.mail = mail;
     }
 
-    public Rol getRol() {
+    public String getRol() {
         return rol;
     }
 
-    public void setRol(Rol rol) {
+    public void setRol(String rol) {
         this.rol = rol;
     }
-    // Método para obtener idRol directamente
-    public Integer getIdRol() {
-        return (rol != null) ? rol.getIdRol() : null; // Devuelve el idRol de Rol si no es null
+    public static class UsuarioResponse {
+        private String nombre;
+        private String rol;
+
+        // Constructor
+        public UsuarioResponse(String nombre, String rol) {
+            this.nombre = nombre;
+            this.rol = rol;
+        }
+
+        // Getters
+        public String getNombre() {
+            return nombre;
+        }
+
+        public String getRol() {
+            return rol;
+        }
     }
 }

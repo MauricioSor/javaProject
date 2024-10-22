@@ -1,8 +1,7 @@
 package com.v1.consultorio.services;
-
 import com.v1.consultorio.DAO.UsuarioDAO;
+import com.v1.consultorio.models.Rol;
 import com.v1.consultorio.models.Usuario;
-import com.v1.consultorio.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,11 @@ public class UsuarioService {
         this.usuarioDAO = usuarioDAO;
     }
 
-    public List<Usuario> obtenerUsuarios(int rolId) {
-        return usuarioDAO.obtenerUsuariosPorRol(rolId);
+//    public List<Usuario> obtenerUsuarios(int rolId) {
+//        return usuarioDAO.obtenerUsuariosPorRol(rolId);
+//    }
+    public Usuario logIn(String mail, String contraseña) {
+        return usuarioDAO.logIn(mail, contraseña);
     }
+
 }
