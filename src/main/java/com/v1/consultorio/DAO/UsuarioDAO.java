@@ -50,17 +50,13 @@ public class UsuarioDAO {
     public Usuario logIn(String mail, String contraseña) {
         Usuario usuario = null;
         String sql = "CALL login(?, ?)";
-
         try (CallableStatement stmt = connection.prepareCall(sql)) {
             stmt.setString(1, mail);
             stmt.setString(2, contraseña);
-
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 usuario = new Usuario();
                 usuario.setNombre(rs.getString("usuario"));
-
                 usuario.setRol(rs.getString("rol"));
                 return usuario;
             }

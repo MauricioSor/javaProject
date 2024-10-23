@@ -1,19 +1,13 @@
 package com.v1.consultorio.controllers;
 
-import com.v1.consultorio.models.Rol;
-import com.v1.consultorio.services.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/roles")  // Prefijo para las rutas relacionadas a roles
 public class RolController {
 
-    @Autowired
-    private RolService rolService;
+
 
 //    // Ruta para obtener todos los roles
 //    @GetMapping("/todos")
