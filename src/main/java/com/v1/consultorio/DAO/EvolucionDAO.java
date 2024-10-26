@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -32,7 +31,8 @@ public class EvolucionDAO {
                 evolucion.setIdEvolucion(rs.getInt("idEvolucion"));
                 evolucion.setTexto(rs.getString("texto"));
                 evolucion.setFecha(rs.getDate("fecha"));
-                evolucion.setHora(rs.getDate("hora"));
+                evolucion.setHora(rs.getTime("hora"));
+                evolucion.setEstadoEvolucion(rs.getBoolean("estadoEvolucion"));
                 // Creamos un nuevo objeto Diagnostico
                 Diagnostico diagnostico = new Diagnostico();
                 diagnostico.setNombre(rs.getString("nombreDiagnostico"));
@@ -45,6 +45,32 @@ public class EvolucionDAO {
             return null;
         }
         return evoluciones;
+    }
+    public String createEvolucion(Evolucion evolucion, int idDiagnostico) {
+        String sql = "CALL create_evolucion(?, ?, ?, ?, ?)";
+        try (CallableStatement stmt = connection.prepareCall(sql)) {
+            stmt.setString(1, evolucion.getTexto());
+            Date fecha = evolucion.getFecha();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String fechaString = sdf.format(fecha);
+            stmt.setString(2, fechaString);
+
+            // Formatear la hora
+            Date hora = evolucion.getHora();
+            SimpleDateFormat horaFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String horaString = horaFormat.format(hora);
+            stmt.setString(3, horaString);
+
+            stmt.setBoolean(4, evolucion.getEstadoEvolucion());
+            stmt.setInt(5, idDiagnostico);
+
+            stmt.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error: " + e.getMessage();
+        }
+        return "Evolucion Creada";
     }
 
 }

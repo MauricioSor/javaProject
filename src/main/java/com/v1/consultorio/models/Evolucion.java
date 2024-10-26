@@ -15,7 +15,7 @@ private int idEvolucion;
 private String texto;
 private Date fecha;
 private Date hora;
-private String estadoEvolucion;
+private Boolean estadoEvolucion;
 
     @ManyToOne
     @JoinColumn(name = "fk_idDiagnostico", referencedColumnName = "idDiagnostico", nullable = false)
@@ -52,11 +52,11 @@ private String estadoEvolucion;
         this.hora = hora;
     }
 
-    public String getEstadoEvolucion() {
+    public Boolean getEstadoEvolucion() {
         return estadoEvolucion;
     }
 
-    public void setEstadoEvolucion(String estadoEvolucion) {
+    public void setEstadoEvolucion(Boolean estadoEvolucion) {
         this.estadoEvolucion = estadoEvolucion;
     }
     public Diagnostico getDiagnostico() {

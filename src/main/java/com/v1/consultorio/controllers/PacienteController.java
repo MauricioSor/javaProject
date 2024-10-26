@@ -55,12 +55,22 @@ public class PacienteController {
     }
    }
     @GetMapping("/getEvolciones")
-    public ResponseEntity<List<Evolucion>> getEvoluciones(@RequestParam int idHistoriaClinica){
-        List<Evolucion> evoluciones = evolucionService.getEvoluciones(idHistoriaClinica);
+    public ResponseEntity<List<Evolucion>> getEvoluciones(@RequestParam int idDiagnostico){
+        List<Evolucion> evoluciones = evolucionService.getEvoluciones(idDiagnostico);
         if(evoluciones!= null){
             return ResponseEntity.ok(evoluciones);
         }else{
             return ResponseEntity.notFound().build();
         }
+    }
+    @PostMapping("/Create")
+    public String createPaciente(@RequestBody Paciente paciente){
+        String result= pacienteService.createPaciente(paciente);
+        return result;
+    }
+    @PostMapping("/Evolucion/Create")
+    public String createEvolucion(@RequestBody Evolucion evolucion,@RequestParam int  idDiagnostico){
+        String result= evolucionService.create_evolucion(evolucion,idDiagnostico);
+        return result;
     }
 }

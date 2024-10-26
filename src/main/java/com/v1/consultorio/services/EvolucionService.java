@@ -17,4 +17,5 @@ public class EvolucionService {
     public List<Evolucion> getEvoluciones(int idDiagnostico){
         return evolucionDAO.getEvoluciones(idDiagnostico);
     }
+    public String create_evolucion(Evolucion evolucion,int idDiagnostico){return evolucionDAO.createEvolucion(evolucion,idDiagnostico);}
 }
