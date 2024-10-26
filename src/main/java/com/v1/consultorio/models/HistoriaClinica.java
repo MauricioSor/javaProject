@@ -5,24 +5,20 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "historia_clinica")
 public class HistoriaClinica {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Asegúrate de usar IDENTITY para que Hibernate no intente generar la clave
-    @Column(name = "id")  // La columna PK ahora se llama 'id'
     private Integer idHistoriaClinica;
-
-    // Otros campos de la tabla 'historia_clinica'
-
+    private Date fechaCreacion;
     // Getters y setters
-    public Integer getId() {
+    public Integer getIdHistoriaClinica() {
         return idHistoriaClinica;
     }
 
-    public void setId(Integer idHistoriaClinica) {
+    public void setIdHistoriaClinica(Integer idHistoriaClinica) {
         this.idHistoriaClinica = idHistoriaClinica;
     }
-
+    public void setFechaCreacion(Date fechaCreacion){this.fechaCreacion=fechaCreacion;}
+    public Date getFechaCreacion(){return fechaCreacion;}
 
 }

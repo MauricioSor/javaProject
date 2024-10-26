@@ -16,11 +16,6 @@ public class UsuarioService {
         this.usuarioDAO = usuarioDAO;
     }
 
-//    public List<Usuario> obtenerUsuarios(int rolId) {
-//        return usuarioDAO.obtenerUsuariosPorRol(rolId);
-//    }
-    public Usuario logIn(String mail, String contraseña) {
-        return usuarioDAO.logIn(mail, contraseña);
-    }
+    public Usuario logIn(String mail, String contraseña) {return usuarioDAO.logIn(mail, contraseña);}
 
 }

@@ -22,6 +22,11 @@ public class Paciente {
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;
 
+    // Relación con HistoriaClinica
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idHistoriaClinica", referencedColumnName = "idHistoriaClinica")
+    private HistoriaClinica historiaClinica;
+
     // Getters y Setters
 
     public int getIdPaciente() {
@@ -73,5 +78,11 @@ public class Paciente {
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
+    public HistoriaClinica getHistoriaClinica() {
+        return historiaClinica;
+    }
 
+    public void setHistoriaClinica(HistoriaClinica historiaClinica) {
+        this.historiaClinica = historiaClinica;
+    }
 }

@@ -17,6 +17,8 @@ public class PacienteService {
     public Paciente getPaciente(String parameter){
         return pacienteDAO.getPaciente(parameter);
     }
-
+//    public Object HistoriaClinicaPaciente(int idPaciente){
+//
+//    }
 
 }

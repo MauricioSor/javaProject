@@ -1,4 +1,5 @@
 package com.v1.consultorio.DAO;
+import com.v1.consultorio.models.HistoriaClinica;
 import com.v1.consultorio.models.Paciente;
 import com.v1.consultorio.models.Rol;
 import com.v1.consultorio.models.Usuario;
@@ -35,6 +36,13 @@ public class PacienteDAO {
                 paciente.setObraSocial(rs.getString("obra_social"));
                 paciente.setFechaNacimiento(rs.getTimestamp("fechaNacimiento"));
                 paciente.setEstado(rs.getBoolean("estado"));
+
+                HistoriaClinica historia = new HistoriaClinica();
+                historia.setIdHistoriaClinica(rs.getInt("idHistoriaClinica"));
+                historia.setFechaCreacion(rs.getDate("fechaCreacion"));
+                paciente.setHistoriaClinica(historia);
+
+
                 return paciente;
             }
             return null;
