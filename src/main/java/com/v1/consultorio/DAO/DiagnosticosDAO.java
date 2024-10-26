@@ -1,9 +1,7 @@
 package com.v1.consultorio.DAO;
-
 import com.v1.consultorio.models.Diagnostico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import javax.sql.DataSource;
 import java.sql.CallableStatement;
 import java.sql.Connection;

@@ -1,8 +1,10 @@
 package com.v1.consultorio.controllers;
 
 import com.v1.consultorio.models.Diagnostico;
+import com.v1.consultorio.models.Evolucion;
 import com.v1.consultorio.models.Paciente;
 import com.v1.consultorio.services.DiagnosticoService;
+import com.v1.consultorio.services.EvolucionService;
 import com.v1.consultorio.services.PacienteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +17,11 @@ public class PacienteController {
 
     private final PacienteService pacienteService;
     private final DiagnosticoService diagnosticoService;
-    public PacienteController(PacienteService pacienteService, DiagnosticoService diagnosticoService) {
+    private final EvolucionService evolucionService;
+    public PacienteController(PacienteService pacienteService, DiagnosticoService diagnosticoService,EvolucionService evolucionService) {
         this.pacienteService = pacienteService;
         this.diagnosticoService = diagnosticoService;
+        this.evolucionService=evolucionService;
     }
 
     @GetMapping("")
@@ -50,4 +54,13 @@ public class PacienteController {
         return ResponseEntity.notFound().build();
     }
    }
+    @GetMapping("/getEvolciones")
+    public ResponseEntity<List<Evolucion>> getEvoluciones(@RequestParam int idHistoriaClinica){
+        List<Evolucion> evoluciones = evolucionService.getEvoluciones(idHistoriaClinica);
+        if(evoluciones!= null){
+            return ResponseEntity.ok(evoluciones);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
