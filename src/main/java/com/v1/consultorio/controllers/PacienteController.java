@@ -3,6 +3,7 @@ package com.v1.consultorio.controllers;
 import com.v1.consultorio.models.Diagnostico;
 import com.v1.consultorio.models.Evolucion;
 import com.v1.consultorio.models.Paciente;
+import com.v1.consultorio.models.PedidoLaboratorio;
 import com.v1.consultorio.services.DiagnosticoService;
 import com.v1.consultorio.services.EvolucionService;
 import com.v1.consultorio.services.PacienteService;
@@ -73,4 +74,10 @@ public class PacienteController {
         String result= evolucionService.create_evolucion(evolucion,idDiagnostico);
         return result;
     }
+    @PostMapping("/Evolucion/PedidoLaboratorio/Create")
+    public String createPedidoLab(@RequestBody PedidoLaboratorio pedido, @RequestParam int  idEvolucion){
+        String result= evolucionService.createPedido(pedido,idEvolucion);
+        return result;
+    }
+
 }

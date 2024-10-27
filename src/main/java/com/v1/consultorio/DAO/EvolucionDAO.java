@@ -2,6 +2,8 @@ package com.v1.consultorio.DAO;
 
 import com.v1.consultorio.models.Diagnostico;
 import com.v1.consultorio.models.Evolucion;
+import com.v1.consultorio.models.PedidoLaboratorio;
+import com.v1.consultorio.models.Receta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +35,6 @@ public class EvolucionDAO {
                 evolucion.setFecha(rs.getDate("fecha"));
                 evolucion.setHora(rs.getTime("hora"));
                 evolucion.setEstadoEvolucion(rs.getBoolean("estadoEvolucion"));
-                // Creamos un nuevo objeto Diagnostico
                 Diagnostico diagnostico = new Diagnostico();
                 diagnostico.setNombre(rs.getString("nombreDiagnostico"));
                 evolucion.setDiagnostico(diagnostico);
@@ -60,17 +61,38 @@ public class EvolucionDAO {
             SimpleDateFormat horaFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String horaString = horaFormat.format(hora);
             stmt.setString(3, horaString);
-
             stmt.setBoolean(4, evolucion.getEstadoEvolucion());
             stmt.setInt(5, idDiagnostico);
-
             stmt.execute();
-
         } catch (SQLException e) {
             e.printStackTrace();
             return "Error: " + e.getMessage();
         }
         return "Evolucion Creada";
     }
-
+    public String createPedidoLaboratorio(PedidoLaboratorio pedido,int idEvolucion){
+        String sql = "CALL create_pedido(?,?)";
+        try (CallableStatement stmt = connection.prepareCall(sql)) {
+            stmt.setString(1, pedido.getTexto());
+            stmt.setInt(2, idEvolucion);
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error: " + e.getMessage();
+        }
+        return "Pedido Creado";
+    }
+//    public String createReceta(Receta receta, int idEvolucion){
+//        String sql = "CALL create_pedido(?,?,?,?,?)";
+//        try (CallableStatement stmt = connection.prepareCall(sql)) {
+//            stmt.setString(1, receta.getMedicamentoGenerico());
+//
+//            stmt.setInt(2, idEvolucion);
+//            stmt.execute();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return "Error: " + e.getMessage();
+//        }
+//        return "Receta Creada";
+//    }
 }

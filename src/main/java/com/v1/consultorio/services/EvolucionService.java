@@ -2,6 +2,7 @@ package com.v1.consultorio.services;
 
 import com.v1.consultorio.DAO.EvolucionDAO;
 import com.v1.consultorio.models.Evolucion;
+import com.v1.consultorio.models.PedidoLaboratorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,5 @@ public class EvolucionService {
         return evolucionDAO.getEvoluciones(idDiagnostico);
     }
     public String create_evolucion(Evolucion evolucion,int idDiagnostico){return evolucionDAO.createEvolucion(evolucion,idDiagnostico);}
+    public String createPedido(PedidoLaboratorio pedidoLaboratorio,int idEvolucion){return evolucionDAO.createPedidoLaboratorio(pedidoLaboratorio,idEvolucion);}
 }

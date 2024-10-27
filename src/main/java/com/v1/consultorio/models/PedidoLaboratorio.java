@@ -10,11 +10,13 @@ public class PedidoLaboratorio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPedido_laboratorio;
+    private int idPedido_laboratorio;
 
     private String texto;  // Hemograma, perfil lipídico, etc.
 
-    @Temporal(TemporalType.DATE)
-    private Date fechaPedido;
+ public int getIdPedido_laboratorio(){return this.idPedido_laboratorio;}
+    public void setIdPedido_laboratorio(int idPedido_laboratorio){this.idPedido_laboratorio=idPedido_laboratorio;}
+    public String getTexto(){return this.texto;}
+    public void setTexto(String texto){this.texto=texto;}
 
 }
