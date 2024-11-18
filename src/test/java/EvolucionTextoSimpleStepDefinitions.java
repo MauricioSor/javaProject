@@ -1,4 +1,5 @@
 import com.sw24.clinicaapp.dto.request.EvolucionReqDTO;
+import com.sw24.clinicaapp.dto.request.PedidoLaboratorioReqDTO;
 import com.sw24.clinicaapp.dto.response.EvolucionResDTO;
 import com.sw24.clinicaapp.entity.*;
 import com.sw24.clinicaapp.enums.EstadoPersona;
@@ -16,6 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +26,7 @@ import static org.mockito.Mockito.*;
 public class EvolucionTextoSimpleStepDefinitions {
 
     private Medico medico;
-    Usuario<Persona> usuarioMedico;
+    private Usuario<Persona> usuarioMedico;
     private Paciente paciente;
     private String dniPaciente;
     private Integer nroHistoriaClinica;
@@ -32,15 +34,20 @@ public class EvolucionTextoSimpleStepDefinitions {
     private List<Diagnostico> diagnosticos;
     private String informe;
     private Diagnostico diagnosticoElegido;
-    EvolucionReqDTO evolucionReqDTO;
-    EvolucionResDTO evolucionResDTO;
+    private String textoPedidoLaboratorio;
+    private Date fechaPedidoLaboratorio;
+    private Evolucion evolucion;
+
+    private EvolucionReqDTO evolucionReqDTO;
+    private EvolucionResDTO evolucionResDTO;
+    private PedidoLaboratorioReqDTO pedidoLaboratorioReqDTO;
 
     private PacienteRepository pacienteRepository;
     private EvolucionRepository evolucionRepository;
-    HistoriaClinicaRepository historiaClinicaRepository;
-    DiagnosticoRespository diagnosticoRespository;
-    MedicoRepository medicoRepository;
-    MedicamentoRepository medicamentoRepository;
+    private HistoriaClinicaRepository historiaClinicaRepository;
+    private DiagnosticoRespository diagnosticoRespository;
+    private MedicoRepository medicoRepository;
+    private MedicamentoRepository medicamentoRepository;
 
     private EvolucionService evolucionService;
     private UsuarioService usuarioService;
@@ -80,7 +87,6 @@ public class EvolucionTextoSimpleStepDefinitions {
         usuarioMedico = new Usuario<>(medico, usuario, password);
         when(usuarioService.iniciarSesion(usuario, password)).thenReturn(usuarioMedico);
         when(medicoRepository.findByDni(medico.getDni())).thenReturn(Optional.of(medico));
-        //assert medico.getNombre().equals(nombreMedico) : "El nombre del medico no coincide";
     }
 
     @And("ha buscado la historia clinica del paciente {string} que posee los siguientes diagnostivos previos:")
@@ -139,10 +145,13 @@ public class EvolucionTextoSimpleStepDefinitions {
     @And("el medico guarda la evolucion")
     public void elMedicoGuardaLaEvolucion() {
         nroHistoriaClinica = paciente.getHistoriaClinica().getNroHistoriaClinica();
-        evolucionReqDTO = new EvolucionReqDTO(informe, diagnosticoElegido.getId(), medico.getDni(), null, null);
+        evolucionReqDTO = new EvolucionReqDTO(informe, diagnosticoElegido.getId(), medico.getDni(), pedidoLaboratorioReqDTO, null);
 
         when(evolucionRepository.save(any(Evolucion.class))).thenAnswer(invocation -> {
-            Evolucion evolucion = invocation.getArgument(0);
+            evolucion = invocation.getArgument(0);
+            if (evolucion.getPedidoLaboratorio() != null) {
+                evolucion.getPedidoLaboratorio().setCodigo(1);
+            }
             evolucion.setId(1);
             return evolucion;
         });
@@ -155,6 +164,23 @@ public class EvolucionTextoSimpleStepDefinitions {
         assertThat(evolucionResDTO.getDiagnostico().getCodigo()).isEqualTo(diagnosticoElegido.getCodigo());
         assertThat(evolucionResDTO.getTexto()).isEqualTo(informe);
         assertThat(evolucionResDTO.getMedico().getDni()).isEqualTo(medico.getDni());
+        verify(evolucionRepository, times(1)).save(any(Evolucion.class));
+    }
+
+    @And("agrega un pedido de laboratorio solicitando un {string} con fecha {string} para el paciente")
+    public void agregaUnPedidoDeLaboratorioSolicitandoUnParaElPaciente(String textoPedidoLaboratorio, String fechaPedidoLaboratorio) throws ParseException {
+        this.textoPedidoLaboratorio = textoPedidoLaboratorio;
+        this.fechaPedidoLaboratorio = new SimpleDateFormat("dd/MM/yyyy").parse(fechaPedidoLaboratorio);
+        pedidoLaboratorioReqDTO = new PedidoLaboratorioReqDTO(textoPedidoLaboratorio, this.fechaPedidoLaboratorio);
+    }
+
+    @Then("se registra la evolucion en la historia clinica del paciente con el diagnostico, el informe, el pedido de laboratorio y el medico.")
+    public void seRegistraLaEvolucionEnLaHistoriaClinicaDelPacienteConElDiagnosticoElInformeElPedidoDeLaboratorioYElMedico() {
+        assertThat(evolucionResDTO.getDiagnostico().getCodigo()).isEqualTo(diagnosticoElegido.getCodigo());
+        assertThat(evolucionResDTO.getTexto()).isEqualTo(informe);
+        assertThat(evolucionResDTO.getMedico().getDni()).isEqualTo(medico.getDni());
+        assertThat(evolucionResDTO.getPedidoLaboratorio().getDescripcion()).isEqualTo(textoPedidoLaboratorio);
+        assertThat(evolucionResDTO.getPedidoLaboratorio().getFecha()).isEqualTo(fechaPedidoLaboratorio);
         verify(evolucionRepository, times(1)).save(any(Evolucion.class));
     }
 }
