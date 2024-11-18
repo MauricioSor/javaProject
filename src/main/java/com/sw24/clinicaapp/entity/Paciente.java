@@ -62,6 +62,6 @@ public class Paciente extends Persona {
         this.pasaporte = pasaporte;
         this.obraSocial = obraSocial;
         this.nroAfiliado = nroAfiliado;
-        this.historiaClinica = new HistoriaClinica(new Date());
+        this.historiaClinica = new HistoriaClinica();
     }
 }

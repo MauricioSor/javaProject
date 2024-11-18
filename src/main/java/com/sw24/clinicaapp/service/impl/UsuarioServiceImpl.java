@@ -80,4 +80,9 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new IllegalArgumentException("Tipo de usuario no soportado");
         }
     }
+
+    @Override
+    public Usuario<Persona> iniciarSesion(String usuario, String password) {
+        return null;
+    }
 }

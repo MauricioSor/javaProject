@@ -1,5 +1,6 @@
 package com.sw24.clinicaapp.dto.response;
 
+import com.sw24.clinicaapp.dto.DiagnosticoDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,4 +18,5 @@ public class EvolucionResDTO {
     private MedicoResDTO medico;
     private PedidoLaboratorioResDTO pedidoLaboratorio;
     private RecetaResDTO receta;
+    private DiagnosticoDTO diagnostico;
 }

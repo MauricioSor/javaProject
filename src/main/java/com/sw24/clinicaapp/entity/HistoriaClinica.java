@@ -3,19 +3,17 @@ package com.sw24.clinicaapp.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 @Entity
-@NoArgsConstructor
 public class HistoriaClinica {
 
     @Id
@@ -37,8 +35,9 @@ public class HistoriaClinica {
     @JsonManagedReference
     private List<Diagnostico> diagnosticos;
 
-    public HistoriaClinica(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
+    public HistoriaClinica() {
+        this.fechaCreacion = new Date();
+        this.diagnosticos = new ArrayList<>();
     }
 
     public void agregarDiagnostico(Diagnostico diagnostico) {

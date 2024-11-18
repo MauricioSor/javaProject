@@ -6,4 +6,5 @@ import com.sw24.clinicaapp.entity.Usuario;
 
 public interface UsuarioService {
     Persona crearUsuario(UsuarioDTO usuarioDTO);
+    Usuario<Persona> iniciarSesion(String usuario, String password);
 }
