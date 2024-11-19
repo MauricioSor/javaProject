@@ -38,6 +38,10 @@ public class EvolucionServiceImpl implements EvolucionService {
     @Override
     public EvolucionResDTO crearEvolucion(Integer historiaClinicaId, EvolucionReqDTO evolucionReqDTO) {
 
+        if (evolucionReqDTO == null) {
+            throw new BadRequestException("La evolución es obligatoria.");
+        }
+
         HistoriaClinica historiaClinica = historiaClinicaRepository.findById(historiaClinicaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Historia Clinica no encontrada."));
         Diagnostico diagnostico = diagnosticoRespository.findById(evolucionReqDTO.getDiagnosticoId())
