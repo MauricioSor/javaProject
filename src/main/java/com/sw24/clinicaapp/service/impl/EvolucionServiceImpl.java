@@ -25,7 +25,7 @@ public class EvolucionServiceImpl implements EvolucionService {
     private final MedicoRepository medicoRepository;
     private final EvolucionRepository evolucionRepository;
     private final MedicamentoRepository medicamentoRepository;
-    private final EvolucionMapper evolucionMapper = com.sw24.clinicaapp.mapper.EvolucionMapper.INSTANCE;
+    private final EvolucionMapper evolucionMapper = EvolucionMapper.INSTANCE;
 
     public EvolucionServiceImpl(HistoriaClinicaRepository historiaClinicaRepository, DiagnosticoRespository diagnosticoRespository, MedicoRepository medicoRepository, EvolucionRepository evolucionRepository, MedicamentoRepository medicamentoRepository) {
         this.historiaClinicaRepository = historiaClinicaRepository;
