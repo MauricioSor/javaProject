@@ -1,40 +1,30 @@
 package com.sw24.clinicaapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Entity
 public class Diagnostico {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "codigo", nullable = false)
-    private String codigo;
-
-    @Column(name = "nombre", nullable = false)
+    private UUID id;
     private String nombre;
-
-    @OneToMany(mappedBy = "diagnostico", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<Evolucion> evoluciones;
 
-    @ManyToMany(mappedBy = "diagnosticos")
-    @JsonBackReference
-    private List<HistoriaClinica> historiasClinicas;
+    public Diagnostico() {
+    }
 
-    public void agregarEvolucion(Evolucion evolucion) {
-        evolucion.setDiagnostico(this);
+    public Diagnostico(String nombre) {
+        this.id = UUID.randomUUID();
+        this.nombre = nombre;
+        this.evoluciones = new ArrayList<>();
+    }
+
+    public void agregarEvolucion(String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento, Integer dosis) {
+        Evolucion evolucion = new Evolucion(informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento, dosis);
         evoluciones.add(evolucion);
     }
 }

@@ -1,46 +1,34 @@
 package com.sw24.clinicaapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import com.sw24.clinicaapp.exception.ResourceNotFoundException;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
-@Setter
-@AllArgsConstructor
-@Builder
-@Entity
 public class HistoriaClinica {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer nroHistoriaClinica;
-
     private Date fechaCreacion;
-
-    @OneToOne(mappedBy = "historiaClinica")
-    @JsonBackReference
-    private Paciente paciente;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "historia_clinica_diagnostico",
-            joinColumns = @JoinColumn(name = "nro_historia_clinica"),
-            inverseJoinColumns = @JoinColumn(name = "id_diagnostico")
-    )
-    @JsonManagedReference
     private List<Diagnostico> diagnosticos;
+    private static final AtomicInteger contadorHistoriaClinica = new AtomicInteger(1000);
 
     public HistoriaClinica() {
+        this.nroHistoriaClinica = contadorHistoriaClinica.incrementAndGet();
         this.fechaCreacion = new Date();
         this.diagnosticos = new ArrayList<>();
     }
 
-    public void agregarDiagnostico(Diagnostico diagnostico) {
+    public void agregarEvolucion(UUID idDiagnostico, String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento, Integer dosis) {
+        Diagnostico diagnostico = diagnosticos.stream().filter(d -> d.getId().equals(idDiagnostico))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontro el diagnostico con id " + idDiagnostico));
+        diagnostico.agregarEvolucion(informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento, dosis);
+    }
+
+    public void agregarDiagnostico(String nombre) {
+        Diagnostico diagnostico = new Diagnostico(nombre);
         diagnosticos.add(diagnostico);
     }
 }

@@ -1,35 +1,20 @@
 package com.sw24.clinicaapp.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.Date;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
 public class Medicamento {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer codigo;
+    private String descripcion;
+    private String formato;
 
-    private String codigo;
+    public Medicamento() {
+    }
 
-    @Column(name = "nombre", nullable = false)
-    private String nombre;
-
-    @Column(name = "marca", nullable = false)
-    private String marca;
-    private Date fechaVencimiento;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "medicamento_generico_id", nullable = false)
-    private MedicamentoGenerico medicamentoGenerico;
-
+    public Medicamento(Integer codigo, String descripcion, String formato) {
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.formato = formato;
+    }
 }

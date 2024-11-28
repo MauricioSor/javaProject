@@ -1,25 +1,21 @@
 package com.sw24.clinicaapp.entity;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Entity
 public class PedidoLaboratorio {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer codigo;
+
+    private UUID id;
     private String descripcion;
     private Date fecha;
 
-    @OneToOne
-    @JsonBackReference
-    private Evolucion evolucion;
+    public PedidoLaboratorio() {}
+
+    public PedidoLaboratorio(String descripcion, Date fecha) {
+        this.id = UUID.randomUUID();
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+    }
 }

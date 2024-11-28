@@ -1,4 +1,4 @@
-package com.sw24.clinicaapp.dto.request;
+package com.sw24.clinicaapp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

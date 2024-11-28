@@ -1,35 +1,44 @@
 package com.sw24.clinicaapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sw24.clinicaapp.enums.EstadoReceta;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Entity
 public class Receta {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+
+    private UUID id;
     private String codigo;
     private String firma;
-    private int dosis;
+    private Integer dosis;
     private Date fecha;
-
-    @OneToOne
-    @JsonBackReference
-    private Evolucion evolucion;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "medicamento_id", nullable = false)
     private Medicamento medicamento;
-
-    @Enumerated(EnumType.STRING)
     private EstadoReceta estadoReceta;
+
+    public Receta() {}
+
+    public Receta(Medicamento medicamento, Integer dosis) {
+        this.id = UUID.randomUUID();
+        this.medicamento = medicamento;
+        this.dosis = dosis;
+        this.fecha = new Date();
+        this.codigo = generarCodigo();
+        this.firma = "Firma del medico";
+        this.estadoReceta = EstadoReceta.ACTIVO;
+    }
+
+    private String generarCodigo() {
+        Random random = new Random();
+        StringBuilder codigoBarras = new StringBuilder();
+
+        for (int i = 0; i < 12; i++) {
+            int digit = random.nextInt(10);
+            codigoBarras.append(digit);
+        }
+        return codigoBarras.toString();
+    }
 }

@@ -1,7 +1,8 @@
 package com.sw24.clinicaapp.controller;
 
-import com.sw24.clinicaapp.dto.UsuarioDTO;
+import com.sw24.clinicaapp.dto.UsuarioReqDTO;
 import com.sw24.clinicaapp.entity.Persona;
+import com.sw24.clinicaapp.entity.Usuario;
 import com.sw24.clinicaapp.service.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,14 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Persona> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        Persona usuario = usuarioService.crearUsuario(usuarioDTO);
+    public ResponseEntity<Persona> crearUsuario(@RequestBody UsuarioReqDTO usuarioReqDTO) {
+        Persona usuario = usuarioService.crearUsuario(usuarioReqDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Usuario<Persona>> iniciarSesion(@RequestBody UsuarioReqDTO usuarioReqDTO) {
+        var usuario = usuarioService.iniciarSesion(usuarioReqDTO.getUsuario(), usuarioReqDTO.getPassword());
+        return ResponseEntity.status(HttpStatus.OK).body(usuario);
     }
 }
