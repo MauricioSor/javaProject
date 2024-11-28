@@ -18,6 +18,9 @@ public class Usuario<T extends Persona> implements UserDetails {
     public Usuario() {}
 
     public Usuario(T persona, String usuario, String password) {
+        if (!(persona instanceof Medico) && !(persona instanceof Recepcionista)) {
+            throw new IllegalArgumentException("El usuario debe ser un Medico o Recepcionista");
+        }
         this.persona = persona;
         this.usuario = usuario;
         this.password = password;
