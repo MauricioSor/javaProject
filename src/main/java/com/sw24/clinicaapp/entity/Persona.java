@@ -2,7 +2,6 @@ package com.sw24.clinicaapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sw24.clinicaapp.enums.EstadoPersona;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;

@@ -1,11 +1,9 @@
 package com.sw24.clinicaapp.entity;
 
 import com.sw24.clinicaapp.enums.EstadoEvolucion;
-import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.Date;
-import java.util.Random;
 import java.util.UUID;
 
 @Getter
