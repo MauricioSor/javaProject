@@ -1,7 +1,6 @@
 package com.sw24.clinicaapp.entity;
 
 import com.sw24.clinicaapp.enums.EstadoReceta;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
@@ -14,17 +13,15 @@ public class Receta {
     private UUID id;
     private String codigo;
     private String firma;
-    private Integer dosis;
     private Date fecha;
     private Medicamento medicamento;
     private EstadoReceta estadoReceta;
 
     public Receta() {}
 
-    public Receta(Medicamento medicamento, Integer dosis) {
+    public Receta(Medicamento medicamento) {
         this.id = UUID.randomUUID();
         this.medicamento = medicamento;
-        this.dosis = dosis;
         this.fecha = new Date();
         this.codigo = generarCodigo();
         this.firma = "Firma del medico";

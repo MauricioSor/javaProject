@@ -20,13 +20,13 @@ public class Evolucion {
     public Evolucion() {
     }
 
-    public Evolucion(String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento, Integer dosis) {
+    public Evolucion(String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento) {
         this.id = UUID.randomUUID();
         this.informe = informe;
         this.medico = medico;
         this.fecha = new Date();
         this.estadoEvolucion = EstadoEvolucion.EDITABLE;
         this.pedidoLaboratorio = (pedidoLabDescripcion != null && pedidoLabFecha != null) ? new PedidoLaboratorio(pedidoLabDescripcion, pedidoLabFecha) : null;
-        this.receta = (medicamento != null && dosis != null) ? new Receta(medicamento, dosis) : null;
+        this.receta = (medicamento != null) ? new Receta(medicamento) : null;
     }
 }

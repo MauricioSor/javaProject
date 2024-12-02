@@ -20,11 +20,11 @@ public class HistoriaClinica {
         this.diagnosticos = new ArrayList<>();
     }
 
-    public void agregarEvolucion(UUID idDiagnostico, String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento, Integer dosis) {
+    public void agregarEvolucion(UUID idDiagnostico, String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento) {
         Diagnostico diagnostico = diagnosticos.stream().filter(d -> d.getId().equals(idDiagnostico))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontro el diagnostico con id " + idDiagnostico));
-        diagnostico.agregarEvolucion(informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento, dosis);
+        diagnostico.agregarEvolucion(informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento);
     }
 
     public void agregarDiagnostico(String nombre) {

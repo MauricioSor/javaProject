@@ -71,7 +71,6 @@ public class PacienteServiceImpl implements PacienteService {
         Date pedidoLabFecha = null;
         Integer codigoMedicamento = null;
         Medicamento medicamento = null;
-        Integer dosis = null;
         String informe = evolucionReqDTO.getInforme();
 
         Paciente paciente = pacienteRepository.findByDni(dniPaciente)
@@ -91,11 +90,10 @@ public class PacienteServiceImpl implements PacienteService {
         // Receta
         if (evolucionReqDTO.getReceta() != null) {
             codigoMedicamento = evolucionReqDTO.getReceta().getCodigoMedicamento();
-            dosis = evolucionReqDTO.getReceta().getDosis();
             // Validar y obtener los datos del medicamento mediante la API externa
             medicamento = obtenerMedicamento(codigoMedicamento, API_URL);
         }
-        paciente.agregarEvolucion(idDiagnostico, informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento, dosis);
+        paciente.agregarEvolucion(idDiagnostico, informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento);
         pacienteRepository.save(paciente);
     }
 

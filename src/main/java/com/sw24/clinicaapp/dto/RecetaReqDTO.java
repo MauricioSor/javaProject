@@ -5,5 +5,4 @@ import lombok.Getter;
 @Getter
 public class RecetaReqDTO {
     private Integer codigoMedicamento;
-    private Integer dosis;
 }

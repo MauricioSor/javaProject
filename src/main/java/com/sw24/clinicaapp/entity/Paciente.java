@@ -23,8 +23,8 @@ public class Paciente extends Persona {
         this.historiaClinica = new HistoriaClinica();
     }
 
-    public void agregarEvolucion(UUID idDiagnostico, String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento, Integer dosis) {
-        this.historiaClinica.agregarEvolucion(idDiagnostico, informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento, dosis);
+    public void agregarEvolucion(UUID idDiagnostico, String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento) {
+        this.historiaClinica.agregarEvolucion(idDiagnostico, informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento);
     }
 
     public void agregarDiagnostico(String nombre) {

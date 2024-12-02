@@ -23,8 +23,8 @@ public class Diagnostico {
         this.evoluciones = new ArrayList<>();
     }
 
-    public void agregarEvolucion(String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento, Integer dosis) {
-        Evolucion evolucion = new Evolucion(informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento, dosis);
+    public void agregarEvolucion(String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento) {
+        Evolucion evolucion = new Evolucion(informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento);
         evoluciones.add(evolucion);
     }
 }
