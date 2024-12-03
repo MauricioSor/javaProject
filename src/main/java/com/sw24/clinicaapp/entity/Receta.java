@@ -38,4 +38,8 @@ public class Receta {
         }
         return codigoBarras.toString();
     }
+
+    public boolean tiene(Medicamento medicamento) {
+        return this.medicamento.equals(medicamento);
+    }
 }

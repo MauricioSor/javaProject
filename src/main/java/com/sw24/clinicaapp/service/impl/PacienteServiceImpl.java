@@ -1,6 +1,7 @@
 package com.sw24.clinicaapp.service.impl;
 
 import com.sw24.clinicaapp.dto.DiagnosticoReqDTO;
+import com.sw24.clinicaapp.dto.ObraSocialResDTO;
 import com.sw24.clinicaapp.dto.PacienteReqDTO;
 import com.sw24.clinicaapp.dto.EvolucionReqDTO;
 import com.sw24.clinicaapp.entity.*;
@@ -35,7 +36,7 @@ public class PacienteServiceImpl implements PacienteService {
 
     @Override
     public Paciente crearPaciente(PacienteReqDTO pacienteReqDTO) {
-        validarObraSocial(pacienteReqDTO.getObraSocial(), API_URL);
+        ObraSocialResDTO obraSocialResDTO = validarObraSocial(pacienteReqDTO.getCodigoObraSocial(), API_URL);
 
         Paciente paciente = new Paciente(
                 pacienteReqDTO.getDni(),
@@ -50,8 +51,9 @@ public class PacienteServiceImpl implements PacienteService {
                 pacienteReqDTO.getEmail(),
                 pacienteReqDTO.getTelefono(),
                 pacienteReqDTO.getPasaporte(),
-                pacienteReqDTO.getObraSocial(),
-                pacienteReqDTO.getNroAfiliado(),
+                obraSocialResDTO.getCodigo(),
+                obraSocialResDTO.getDenominacion(),
+                obraSocialResDTO.getSigla(),
                 EstadoPersona.ACTIVO
         );
         return pacienteRepository.save(paciente);
@@ -80,7 +82,7 @@ public class PacienteServiceImpl implements PacienteService {
                 .getPersona();
 
         // Validar código de obra social
-        validarObraSocial(paciente.getObraSocial(), API_URL);
+        validarObraSocial(paciente.getCodigoObraSocial(), API_URL);
 
         // Pedido de laboratorio
         if (evolucionReqDTO.getPedidoLaboratorio() != null) {
@@ -97,14 +99,15 @@ public class PacienteServiceImpl implements PacienteService {
         pacienteRepository.save(paciente);
     }
 
-    private void validarObraSocial(String codigoObraSocial, String API_URL) {
+    private ObraSocialResDTO validarObraSocial(String codigoObraSocial, String API_URL) {
         String urlObraSocial;
         urlObraSocial = API_URL + "/obras-sociales/" + codigoObraSocial;
         try {
-            ResponseEntity<String> response = restTemplate.getForEntity(urlObraSocial, String.class);
+            ResponseEntity<ObraSocialResDTO> response = restTemplate.getForEntity(urlObraSocial, ObraSocialResDTO.class);
             if (!response.getStatusCode().is2xxSuccessful()) {
                 throw new BadRequestException("Código de obra social no válido.");
             }
+            return response.getBody();
         } catch (HttpClientErrorException e) {
             throw new BadRequestException("Código de obra social no válido.");
         }

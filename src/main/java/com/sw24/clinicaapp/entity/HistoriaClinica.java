@@ -9,9 +9,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Getter
 public class HistoriaClinica {
 
-    private Integer nroHistoriaClinica;
-    private Date fechaCreacion;
-    private List<Diagnostico> diagnosticos;
+    private final Integer nroHistoriaClinica;
+    private final Date fechaCreacion;
+    private final List<Diagnostico> diagnosticos;
     private static final AtomicInteger contadorHistoriaClinica = new AtomicInteger(1000);
 
     public HistoriaClinica() {
@@ -21,14 +21,28 @@ public class HistoriaClinica {
     }
 
     public void agregarEvolucion(UUID idDiagnostico, String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento) {
-        Diagnostico diagnostico = diagnosticos.stream().filter(d -> d.getId().equals(idDiagnostico))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("No se encontro el diagnostico con id " + idDiagnostico));
+        Diagnostico diagnostico = obtenerDiagnostico(idDiagnostico);
         diagnostico.agregarEvolucion(informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento);
     }
 
     public void agregarDiagnostico(String nombre) {
         Diagnostico diagnostico = new Diagnostico(nombre);
         diagnosticos.add(diagnostico);
+    }
+
+    public void agregarDiagnostico(UUID idDiagnostico, String nombre) {
+        Diagnostico diagnostico = new Diagnostico(idDiagnostico, nombre);
+        diagnosticos.add(diagnostico);
+    }
+
+    public boolean tieneEvolucion(UUID idDiagnostico, String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento) {
+        Diagnostico diagnostico = obtenerDiagnostico(idDiagnostico);
+        return diagnostico.tieneEvolucion(informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento);
+    }
+
+    private Diagnostico obtenerDiagnostico(UUID idDiagnostico) {
+        return diagnosticos.stream().filter(d -> d.getId().equals(idDiagnostico))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontro el diagnostico con id " + idDiagnostico));
     }
 }

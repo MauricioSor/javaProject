@@ -7,4 +7,12 @@ import java.util.Date;
 public class PedidoLaboratorioReqDTO {
     private String descripcion;
     private Date fecha;
+
+    public PedidoLaboratorioReqDTO() {
+    }
+
+    public PedidoLaboratorioReqDTO(String descripcion, Date fecha) {
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+    }
 }
