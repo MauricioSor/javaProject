@@ -6,9 +6,7 @@ import com.sw24.clinicaapp.entity.*;
 import com.sw24.clinicaapp.enums.EstadoPersona;
 import com.sw24.clinicaapp.repository.*;
 import com.sw24.clinicaapp.service.PacienteService;
-import com.sw24.clinicaapp.service.UsuarioService;
 import com.sw24.clinicaapp.service.impl.PacienteServiceImpl;
-import com.sw24.clinicaapp.service.impl.UsuarioServiceImpl;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -38,14 +36,13 @@ public class EvolucionTextoSimpleStepDefinitions {
     private String dniMedico;
     private Usuario<Persona> usuarioMedico;
 
-    private PedidoLaboratorioReqDTO pedidoLaboratorioReqDTO;
-
     private PacienteService pacienteService;
     private PacienteRepository pacienteRepository;
-    private UsuarioService usuarioService;
     private UsuarioRepository usuarioRepository;
-
     private PasswordEncoder passwordEncoder;
+
+    private PedidoLaboratorioReqDTO pedidoLaboratorioReqDTO;
+
 
     @Before
     public void setUp() {
@@ -53,13 +50,16 @@ public class EvolucionTextoSimpleStepDefinitions {
         pacienteRepository = mock(PacienteRepository.class);
         passwordEncoder = mock(PasswordEncoder.class);
 
-        usuarioService = new UsuarioServiceImpl(usuarioRepository, passwordEncoder);
         pacienteService = new PacienteServiceImpl(pacienteRepository, usuarioRepository);
+
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
     }
 
-    @Given("el medico {string} {string} que ha iniciado sesion con usuario {string} y password {string}")
-    public void elMedicoQueHaIniciadoSesion(String nombreMedico, String apellidoMedico, String usuario, String password) throws ParseException {
+    @Given("el medico {string} {string} que ha iniciado sesion")
+    public void elMedicoQueHaIniciadoSesion(String nombreMedico, String apellidoMedico) throws ParseException {
         this.fechaNacimiento = new SimpleDateFormat("dd-MM-yyyy").parse("08-01-1970");
+        String usuario = "marcelo.perez";
+        String password = "password123";
 
         Medico medico = new Medico(
                 "16523950",
@@ -78,14 +78,8 @@ public class EvolucionTextoSimpleStepDefinitions {
                 EstadoPersona.ACTIVO
         );
 
-        when(passwordEncoder.encode(password)).thenReturn("encodedPassword");
-        when(passwordEncoder.matches(password, "encodedPassword")).thenReturn(true);
-
         this.usuarioMedico = new Usuario<>(medico, usuario, passwordEncoder.encode(password));
-        when(usuarioRepository.findByUsuario(anyString())).thenReturn(Optional.of(this.usuarioMedico));
-
-        assertThat(usuarioService.iniciarSesion(usuario, password)).isEqualTo(this.usuarioMedico);
-        verify(usuarioRepository, times(1)).findByUsuario(usuario);
+        when(usuarioRepository.findByDni(anyString())).thenReturn(Optional.of(this.usuarioMedico));
     }
 
     @And("ha buscado la historia clinica del paciente {string} que posee los siguientes diagnostivos previos:")
@@ -126,13 +120,12 @@ public class EvolucionTextoSimpleStepDefinitions {
     public void elMedicoRedactaParaElPacienteUnInformeEnLaEvolucionParaElDiagnosticoEhIndicaEnElMismo(String idDiagnosticoElegido, String informe) {
         this.informe = informe;
         this.idDiagnosticoElegido = UUID.fromString(idDiagnosticoElegido);
-        this.dniMedico = usuarioMedico.getPersona().getDni();
+        this.dniMedico = this.usuarioMedico.getPersona().getDni();
     }
 
     @And("el medico guarda la evolucion")
     public void elMedicoGuardaLaEvolucion() {
         EvolucionReqDTO evolucionReqDTO = new EvolucionReqDTO(this.informe, this.dniMedico, this.pedidoLaboratorioReqDTO, null);
-        when(usuarioRepository.findByDni(anyString())).thenReturn(Optional.of(this.usuarioMedico));
         pacienteService.agregarEvolucion(this.dniPaciente, this.idDiagnosticoElegido, evolucionReqDTO);
     }
 

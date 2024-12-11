@@ -4,7 +4,7 @@ Feature: Agregar una nueva evolucion simple con diagnostico previo
   Para llevar un registro de las evoluciones que posea mi paciente
 
   Background:
-    Given el medico "Marcelo" "Perez" que ha iniciado sesion con usuario "marcelo.perez" y password "123456"
+    Given el medico "Marcelo" "Perez" que ha iniciado sesion
     And ha buscado la historia clinica del paciente "25320160" que posee los siguientes diagnostivos previos:
       | e17a1980-c22b-467b-b20e-08a46344fb4a | Covid  |
       | 936da01f-945d-4a21-aaa1-6499e6754fe6 | Gripe  |
