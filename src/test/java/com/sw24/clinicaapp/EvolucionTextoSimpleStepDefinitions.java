@@ -112,8 +112,6 @@ public class EvolucionTextoSimpleStepDefinitions {
         });
 
         when(pacienteRepository.findByDni(this.dniPaciente)).thenReturn(Optional.of(this.paciente));
-        assertThat(pacienteService.buscarPacientePorDni(this.dniPaciente)).isEqualTo(this.paciente);
-        verify(pacienteRepository, times(1)).findByDni(this.dniPaciente);
     }
 
     @When("el medico redacta para el paciente un informe en la evolucion para el diagnostico {string} eh indica en el mismo {string}")
@@ -131,7 +129,7 @@ public class EvolucionTextoSimpleStepDefinitions {
 
     @Then("se registra la evolucion en la historia clinica del paciente con el diagnostico, el informe y el medico.")
     public void seRegistraLaEvolucionEnLaHistoriaClinicaDelPacienteConElDiagnosticoElInformeYElMedico() {
-        verify(pacienteRepository, times(2)).findByDni(this.dniPaciente);
+        verify(pacienteRepository, times(1)).findByDni(this.dniPaciente);
         verify(usuarioRepository, times(1)).findByDni(this.dniMedico);
         verify(pacienteRepository, times(1)).save(this.paciente);
         assertThat(this.paciente.tieneEvolucion(this.idDiagnosticoElegido, this.informe, (Medico) this.usuarioMedico.getPersona(), null, null, null)).isTrue();
@@ -146,7 +144,7 @@ public class EvolucionTextoSimpleStepDefinitions {
 
     @Then("se registra la evolucion en la historia clinica del paciente con el diagnostico, el informe, el pedido de laboratorio y el medico.")
     public void seRegistraLaEvolucionEnLaHistoriaClinicaDelPacienteConElDiagnosticoElInformeElPedidoDeLaboratorioYElMedico() {
-        verify(pacienteRepository, times(2)).findByDni(this.dniPaciente);
+        verify(pacienteRepository, times(1)).findByDni(this.dniPaciente);
         verify(usuarioRepository, times(1)).findByDni(this.dniMedico);
         verify(pacienteRepository, times(1)).save(this.paciente);
         assertThat(this.paciente.tieneEvolucion(this.idDiagnosticoElegido, this.informe, (Medico) this.usuarioMedico.getPersona(), this.pedLaboratorioDescripcion, this.pedLaboratorioFecha, null)).isTrue();
