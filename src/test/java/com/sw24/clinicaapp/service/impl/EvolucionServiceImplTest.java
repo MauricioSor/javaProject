@@ -9,6 +9,7 @@ import com.sw24.clinicaapp.repository.*;
 import com.sw24.clinicaapp.service.PacienteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ class EvolucionServiceImplTest {
     PacienteRepository pacienteRepository;
 
     PacienteService pacienteService;
+    PasswordEncoder passwordEncoder;
 
     Paciente paciente;
     Medico medico;
@@ -35,6 +37,7 @@ class EvolucionServiceImplTest {
     void setUp() {
         this.usuarioRepository = mock(UsuarioRepository.class);
         this.pacienteRepository = mock(PacienteRepository.class);
+        this.passwordEncoder = mock(PasswordEncoder.class);
         this.pacienteService = new PacienteServiceImpl(pacienteRepository, usuarioRepository);
 
         this.paciente = new Paciente(
@@ -76,7 +79,7 @@ class EvolucionServiceImplTest {
                 EstadoPersona.ACTIVO
         );
 
-        this.usuarioMedico = new Usuario<>(this.medico, "medicoUser", "1234");
+        this.usuarioMedico = new Usuario<>(this.medico, "medicoUser", passwordEncoder.encode("123456"));
 
         when(usuarioRepository.findByDni("12345678")).thenReturn(Optional.of(this.usuarioMedico));
         when(pacienteRepository.findByDni("30265408")).thenReturn(Optional.of(this.paciente));
