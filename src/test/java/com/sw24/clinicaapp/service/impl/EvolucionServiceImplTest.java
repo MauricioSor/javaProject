@@ -1,5 +1,6 @@
 package com.sw24.clinicaapp.service.impl;
 
+import com.sw24.clinicaapp.client.ApiExternaClient;
 import com.sw24.clinicaapp.dto.EvolucionReqDTO;
 import com.sw24.clinicaapp.dto.PedidoLaboratorioReqDTO;
 import com.sw24.clinicaapp.entity.*;
@@ -27,6 +28,7 @@ class EvolucionServiceImplTest {
     PacienteRepository pacienteRepository;
 
     PacienteService pacienteService;
+    ApiExternaClient apiExternaClient;
     PasswordEncoder passwordEncoder;
 
     Paciente paciente;
@@ -38,7 +40,9 @@ class EvolucionServiceImplTest {
         this.usuarioRepository = mock(UsuarioRepository.class);
         this.pacienteRepository = mock(PacienteRepository.class);
         this.passwordEncoder = mock(PasswordEncoder.class);
-        this.pacienteService = new PacienteServiceImpl(pacienteRepository, usuarioRepository);
+        this.apiExternaClient = mock(ApiExternaClient.class);
+
+        this.pacienteService = new PacienteServiceImpl(pacienteRepository, usuarioRepository, apiExternaClient);
 
         this.paciente = new Paciente(
                 "30265408",

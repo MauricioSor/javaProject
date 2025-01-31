@@ -1,6 +1,8 @@
 package com.sw24.clinicaapp;
 
+import com.sw24.clinicaapp.client.ApiExternaClient;
 import com.sw24.clinicaapp.dto.EvolucionReqDTO;
+import com.sw24.clinicaapp.dto.ObraSocialResDTO;
 import com.sw24.clinicaapp.dto.PedidoLaboratorioReqDTO;
 import com.sw24.clinicaapp.entity.*;
 import com.sw24.clinicaapp.enums.EstadoPersona;
@@ -39,6 +41,7 @@ public class EvolucionTextoSimpleStepDefinitions {
     private PacienteService pacienteService;
     private PacienteRepository pacienteRepository;
     private UsuarioRepository usuarioRepository;
+    private ApiExternaClient apiExternaClient;
     private PasswordEncoder passwordEncoder;
 
     private PedidoLaboratorioReqDTO pedidoLaboratorioReqDTO;
@@ -49,10 +52,14 @@ public class EvolucionTextoSimpleStepDefinitions {
         usuarioRepository = mock(UsuarioRepository.class);
         pacienteRepository = mock(PacienteRepository.class);
         passwordEncoder = mock(PasswordEncoder.class);
+        apiExternaClient = mock(ApiExternaClient.class);
 
-        pacienteService = new PacienteServiceImpl(pacienteRepository, usuarioRepository);
+        pacienteService = new PacienteServiceImpl(pacienteRepository, usuarioRepository, apiExternaClient);
 
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+
+        when(apiExternaClient.obtenerObraSocial("001"))
+                .thenReturn(new ObraSocialResDTO("001", "Obra Social EP", "OSEP"));
     }
 
     @Given("el medico {string} {string} que ha iniciado sesion")
