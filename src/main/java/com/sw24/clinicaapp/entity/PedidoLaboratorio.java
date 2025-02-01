@@ -18,4 +18,8 @@ public class PedidoLaboratorio {
         this.descripcion = descripcion;
         this.fecha = fecha;
     }
+
+    public boolean tiene(String pedidoLabDescripcion, Date pedidoLabFecha) {
+        return this.descripcion.equals(pedidoLabDescripcion) && this.fecha.equals(pedidoLabFecha);
+    }
 }

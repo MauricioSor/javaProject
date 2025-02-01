@@ -1,10 +1,7 @@
 package com.sw24.clinicaapp.service;
 
-import com.sw24.clinicaapp.dto.UsuarioReqDTO;
-import com.sw24.clinicaapp.entity.Persona;
-import com.sw24.clinicaapp.entity.Usuario;
+import com.sw24.clinicaapp.security.auth.RegisterRequest;
 
 public interface UsuarioService {
-    Persona crearUsuario(UsuarioReqDTO usuarioReqDTO);
-    Usuario<Persona> iniciarSesion(String usuario, String password);
+    void crearUsuario(RegisterRequest registerRequest);
 }

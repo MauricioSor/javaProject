@@ -23,8 +23,18 @@ public class Diagnostico {
         this.evoluciones = new ArrayList<>();
     }
 
+    public Diagnostico(UUID id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+        this.evoluciones = new ArrayList<>();
+    }
+
     public void agregarEvolucion(String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento) {
         Evolucion evolucion = new Evolucion(informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento);
         evoluciones.add(evolucion);
+    }
+
+    public boolean tieneEvolucion(String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento) {
+        return this.evoluciones.stream().anyMatch(evolucion -> evolucion.tiene(informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento));
     }
 }

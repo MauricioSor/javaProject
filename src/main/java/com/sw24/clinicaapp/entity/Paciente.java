@@ -9,17 +9,20 @@ import java.util.UUID;
 @Getter
 public class Paciente extends Persona {
     private String pasaporte;
-    private String obraSocial;
-    private String nroAfiliado;
+    private String codigoObraSocial;
+    private String denominacionObraSocial;
+    private String siglaObraSocial;
+
     private HistoriaClinica historiaClinica;
 
     public Paciente() {}
 
-    public Paciente(String dni, String cuil, String apellido, String nombre, Date fechaNacimiento, String direccion, String localidad, String provincia, String pais, String email, String telefono, String pasaporte, String obraSocial, String nroAfiliado, EstadoPersona estadoPersona) {
+    public Paciente(String dni, String cuil, String apellido, String nombre, Date fechaNacimiento, String direccion, String localidad, String provincia, String pais, String email, String telefono, String pasaporte, String codigoObraSocial, String denominacionObraSocial, String siglaObraSocial, EstadoPersona estadoPersona) {
         super(dni, cuil, apellido, nombre, fechaNacimiento, direccion, localidad, provincia, pais, email, telefono, estadoPersona);
         this.pasaporte = pasaporte;
-        this.obraSocial = obraSocial;
-        this.nroAfiliado = nroAfiliado;
+        this.codigoObraSocial = codigoObraSocial;
+        this.denominacionObraSocial = denominacionObraSocial;
+        this.siglaObraSocial = siglaObraSocial;
         this.historiaClinica = new HistoriaClinica();
     }
 
@@ -28,6 +31,14 @@ public class Paciente extends Persona {
     }
 
     public void agregarDiagnostico(String nombre) {
-        historiaClinica.agregarDiagnostico(nombre);
+        this.historiaClinica.agregarDiagnostico(nombre);
+    }
+
+    public void agregarDiagnostico(UUID idDiagnostico,String nombre) {
+        this.historiaClinica.agregarDiagnostico(idDiagnostico, nombre);
+    }
+
+    public boolean tieneEvolucion(UUID idDiagnosticoElegido, String informe, Medico medico, String pedidoLabDescripcion, Date pedidoLabFecha, Medicamento medicamento) {
+        return this.historiaClinica.tieneEvolucion(idDiagnosticoElegido, informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento);
     }
 }

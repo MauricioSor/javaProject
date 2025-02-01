@@ -4,6 +4,7 @@ import com.sw24.clinicaapp.enums.EstadoPersona;
 import lombok.*;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Getter
 public class Medico extends Persona {
@@ -21,5 +22,14 @@ public class Medico extends Persona {
         super(dni, cuil, apellido, nombre, fechaNacimiento, direccion, localidad, provincia, pais, email, telefono, estadoPersona);
         this.matricula = matricula;
         this.especialidad = especialidad;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Medico medico = (Medico) o;
+        return Objects.equals(matricula, medico.matricula) && Objects.equals(especialidad, medico.especialidad);
     }
 }

@@ -1,11 +1,17 @@
-package com.sw24.clinicaapp.dto;
+package com.sw24.clinicaapp.security.auth;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Getter
-public class UsuarioReqDTO {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class RegisterRequest {
     private String tipoUsuario; // "medico" o "recepcionista"
 
     private String dni;

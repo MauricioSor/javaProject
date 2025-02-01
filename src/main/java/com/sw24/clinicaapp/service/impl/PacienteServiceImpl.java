@@ -1,6 +1,8 @@
 package com.sw24.clinicaapp.service.impl;
 
+import com.sw24.clinicaapp.client.ApiExternaClient;
 import com.sw24.clinicaapp.dto.DiagnosticoReqDTO;
+import com.sw24.clinicaapp.dto.ObraSocialResDTO;
 import com.sw24.clinicaapp.dto.PacienteReqDTO;
 import com.sw24.clinicaapp.dto.EvolucionReqDTO;
 import com.sw24.clinicaapp.entity.*;
@@ -9,11 +11,8 @@ import com.sw24.clinicaapp.exception.BadRequestException;
 import com.sw24.clinicaapp.exception.ResourceNotFoundException;
 import com.sw24.clinicaapp.repository.*;
 import com.sw24.clinicaapp.service.PacienteService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 import java.util.UUID;
@@ -23,19 +22,17 @@ public class PacienteServiceImpl implements PacienteService {
 
     private final PacienteRepository pacienteRepository;
     private final UsuarioRepository usuarioRepository;
+    private final ApiExternaClient apiExternaClient;
 
-    RestTemplate restTemplate = new RestTemplate();
-    private static String API_URL = "https://istp1service.azurewebsites.net/api/servicio-salud";
-
-
-    public PacienteServiceImpl(PacienteRepository pacienteRepository, UsuarioRepository usuarioRepository) {
+    public PacienteServiceImpl(PacienteRepository pacienteRepository, UsuarioRepository usuarioRepository, ApiExternaClient apiExternaClient) {
         this.pacienteRepository = pacienteRepository;
         this.usuarioRepository = usuarioRepository;
+        this.apiExternaClient = apiExternaClient;
     }
 
     @Override
     public Paciente crearPaciente(PacienteReqDTO pacienteReqDTO) {
-        validarObraSocial(pacienteReqDTO.getObraSocial(), API_URL);
+        ObraSocialResDTO obraSocialResDTO = validarObraSocial(pacienteReqDTO.getCodigoObraSocial());
 
         Paciente paciente = new Paciente(
                 pacienteReqDTO.getDni(),
@@ -50,8 +47,9 @@ public class PacienteServiceImpl implements PacienteService {
                 pacienteReqDTO.getEmail(),
                 pacienteReqDTO.getTelefono(),
                 pacienteReqDTO.getPasaporte(),
-                pacienteReqDTO.getObraSocial(),
-                pacienteReqDTO.getNroAfiliado(),
+                obraSocialResDTO.getCodigo(),
+                obraSocialResDTO.getDenominacion(),
+                obraSocialResDTO.getSigla(),
                 EstadoPersona.ACTIVO
         );
         return pacienteRepository.save(paciente);
@@ -80,7 +78,7 @@ public class PacienteServiceImpl implements PacienteService {
                 .getPersona();
 
         // Validar código de obra social
-        validarObraSocial(paciente.getObraSocial(), API_URL);
+        validarObraSocial(paciente.getCodigoObraSocial());
 
         // Pedido de laboratorio
         if (evolucionReqDTO.getPedidoLaboratorio() != null) {
@@ -91,39 +89,26 @@ public class PacienteServiceImpl implements PacienteService {
         if (evolucionReqDTO.getReceta() != null) {
             codigoMedicamento = evolucionReqDTO.getReceta().getCodigoMedicamento();
             // Validar y obtener los datos del medicamento mediante la API externa
-            medicamento = obtenerMedicamento(codigoMedicamento, API_URL);
+            medicamento = obtenerMedicamento(codigoMedicamento);
         }
         paciente.agregarEvolucion(idDiagnostico, informe, medico, pedidoLabDescripcion, pedidoLabFecha, medicamento);
         pacienteRepository.save(paciente);
     }
 
-    private void validarObraSocial(String codigoObraSocial, String API_URL) {
-        String urlObraSocial;
-        urlObraSocial = API_URL + "/obras-sociales/" + codigoObraSocial;
+    private ObraSocialResDTO validarObraSocial(String codigoObraSocial) {
         try {
-            ResponseEntity<String> response = restTemplate.getForEntity(urlObraSocial, String.class);
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new BadRequestException("Código de obra social no válido.");
-            }
+            return apiExternaClient.obtenerObraSocial(codigoObraSocial);
         } catch (HttpClientErrorException e) {
             throw new BadRequestException("Código de obra social no válido.");
         }
     }
 
-    private Medicamento obtenerMedicamento(Integer codigoMedicamento, String API_URL) {
-        Medicamento medicamento;
-        String urlMedicamentos = API_URL + "/medicamentos/" + codigoMedicamento;
+    private Medicamento obtenerMedicamento(Integer codigoMedicamento) {
         try {
-            ResponseEntity<Medicamento> response = restTemplate.getForEntity(urlMedicamentos, Medicamento.class);
-            if (response.getStatusCode() == HttpStatus.OK) {
-                medicamento = response.getBody();
-            } else {
-                throw new BadRequestException("Código de medicamento no arrojó resultados.");
-            }
+            return apiExternaClient.obtenerMedicamento(codigoMedicamento);
         } catch (HttpClientErrorException e) {
             throw new BadRequestException(e.getMessage());
         }
-        return medicamento;
     }
 
     @Override
